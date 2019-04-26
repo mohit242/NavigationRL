@@ -87,6 +87,8 @@ if __name__ == "__main__":
         print("Loading network weights from file - {}".format(params["network_weight_file"]))
         agent.qnet_local.load_state_dict(torch.load(params["network_weight_file"]))
         score = 0
+        env_info = env.reset(train_mode=True)[brain_name]
+        state = env_info.vector_observations[0]
         while True:
             action = agent.act(state, eps=0)
             env_info = env.step(action)[brain_name]

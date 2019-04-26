@@ -8,7 +8,7 @@ from navigationrl.utils import ReplayBuffer
 class DQNAgent(RLAgent):
 
     def __init__(self, state_size, action_size, seed, device, qnet_params, buffer_size=int(1e5), batch_size=64,
-                 gamma=0.99, tau=1e-3, lr=5e-4, update_every=4):
+                 gamma=0.99, tau=1e-3, lr=5e-4, update_every=4, logger=None):
         """A RL agent that utilizes Deep Q-Networks for Q-value approximation.
 
         Args:
@@ -24,6 +24,7 @@ class DQNAgent(RLAgent):
             lr (float): learning rate
             update_every (int): number of steps before every update
         """
+        self.logger = logger
         self.state_size = state_size
         self.action_size = action_size
         self.seed = seed
@@ -46,6 +47,7 @@ class DQNAgent(RLAgent):
 
         # init time step
         self.t_step = 0
+
 
     def step(self, state, action, reward, next_state, done):
         self.memory.add(state, action, reward, next_state, done)
@@ -81,7 +83,8 @@ class DQNAgent(RLAgent):
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
-
+        if self.logger is not None:
+            self.logger.log_metric("loss", loss)
         self.soft_update()
 
     def soft_update(self):

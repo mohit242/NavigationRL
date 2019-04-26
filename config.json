@@ -1,0 +1,12 @@
+{
+  "qnet_params": {
+    "type": "simple",
+    "fc1_units": "128",
+    "fc2_units": "64"
+  },
+  "logging": "True",
+  "max_epsidoes": "2000",
+  "eps_start": ,
+  "eps_end": ,
+  "eps_decay": ,
+}

@@ -8,7 +8,7 @@ from navigationrl.utils import ReplayBuffer
 class DQNAgent(RLAgent):
 
     def __init__(self, state_size, action_size, seed, device, qnet_params, buffer_size=int(1e5), batch_size=64,
-                 gamma=0.99, tau=1e-3, lr=5e-4, update_every=4, logger=None):
+                 gamma=0.99, tau=1e-3, lr=5e-4, update_every=4, logger=None, double_dqn=False):
         """A RL agent that utilizes Deep Q-Networks for Q-value approximation.
 
         Args:
@@ -28,20 +28,21 @@ class DQNAgent(RLAgent):
         self.state_size = state_size
         self.action_size = action_size
         self.seed = seed
-        self.buffer_size = buffer_size
-        self.batch_size = batch_size
+        self.buffer_size = int(buffer_size)
+        self.batch_size = int(batch_size)
         self.gamma = gamma
         self.tau = tau
         self.lr = lr
         self.update_every = update_every
         self.device = device
-
+        self.double_dqn = double_dqn
         # Q-Network
         qnet_factory = QNetFactory(state_size, action_size, seed)
         self.qnet_local = qnet_factory(qnet_params)
         self.qnet_target = qnet_factory(qnet_params)
         self.optimizer = torch.optim.Adam(self.qnet_local.parameters(), self.lr)
 
+        torch.manual_seed(seed)
         # Replay Memory
         self.memory = ReplayBuffer(action_size, self.buffer_size, self.batch_size, seed)
 
@@ -73,7 +74,12 @@ class DQNAgent(RLAgent):
     def learn(self, experiences):
         states, actions, rewards , next_states, dones = experiences
 
-        Q_targets_next = self.qnet_target(next_states).detach().max(1)[0].unsqueeze(1)
+        if not self.double_dqn:
+            Q_targets_next = self.qnet_target(next_states).detach().max(1)[0].unsqueeze(1)
+        else:
+
+            _, next_state_actions = self.qnet_local(next_states).max(1, keepdim=True).detach()
+            Q_targets_next = self.qnet_target(next_states).gather(1, next_state_actions).detach()
 
         Q_targets = rewards + (self.gamma * Q_targets_next * (1 - dones))
 

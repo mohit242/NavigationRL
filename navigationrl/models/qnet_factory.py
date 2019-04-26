@@ -1,5 +1,5 @@
 from .qnetsimple import QNetworkSimple
-
+from .qnetdueling import QNetworkDueling
 
 class QNetFactory:
 
@@ -25,14 +25,15 @@ class QNetFactory:
             QNetwork object
         """
         qnet_type = qnet_params['type'].lower()
-        params = {key: value for key, value in qnet_params.items() if key is not 'type'}
+        params = {key: value for key, value in qnet_params.items() if key != 'type'}
         if qnet_type == "simple":
             qnet = QNetworkSimple(self.state_size, self.action_size, self.seed,
                                   **params)
             return qnet
 
         elif qnet_type == 'dueling':
-            pass
+            qnet = QNetworkDueling(self.state_size, self.action_size, self.seed, **params)
+            return qnet
 
         else:
             raise Exception("Q-Network type not recognized")

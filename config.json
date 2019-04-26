@@ -5,7 +5,7 @@
     "fc2_units": 64
   },
   "double_dqn": false,
-  "logging": true,
+  "logging": false,
   "max_episodes": 2000,
   "eps_start": 1.0,
   "eps_end": 0.01,
@@ -17,6 +17,6 @@
   "lr": 5e-4,
   "update_every": 4,
   "network_weight_file": "checkpoint.pth",
-  "no_graphics": true,
+  "no_graphics": false,
   "seed": 100
 }

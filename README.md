@@ -71,3 +71,4 @@ To run any of the three saved networks -
 `python main.py --config experiments/dqn/config.json --play`
 
 Replace `dqn` with `double_dqn` or `dueling_dqn` to play using the other network weights.
+

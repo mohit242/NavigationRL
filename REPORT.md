@@ -32,12 +32,12 @@ Vector Action space size (per agent): 4
 ```
 ### Learning Algorithm
 
-For this project we are using value-based methods, specifically Deep Q learning.
+For this project value-based methods are used, specifically Deep Q learning.
 Deep Q learning algorithms use a deep neural network to approximate the Q-value function.
-Since in our project we don't use image input from the environment, we don't need to use 
-convolutional neural nets. We will be using fully connected networks for our implementations.
+Since in this project image input from the environment isn't, there is no need to use 
+convolutional neural nets. Fully connected networks will be used for all implementations.
 
-Parameters used all runs - 
+Parameters used for all runs - 
 ```
 batch_size	64	
 buffer_size	100000.0	
@@ -72,13 +72,17 @@ of taking that `action` at the `next_state`.
 > Q<sub>target</sub> = r(s, a) + \gamma * Q(s<sup>\'</sup>,
  argmax<sub>a</sub>Q(s<sup>'</sup>, a, \theta<sup>target</sup>), 
  \theta<sup>local</sup>)
- ```
+ 
+ 
+ 
+```
 QNetworkSimple(
   (fc1): Linear(in_features=37, out_features=128, bias=True)
   (fc2): Linear(in_features=128, out_features=64, bias=True)
   (fc3): Linear(in_features=64, out_features=4, bias=True)
 )
 ```
+
 #### 3. Dueling DQN
 Q-values `Q(s,a)` can be decomposed as a sum of:
 - `V(s)`: the value of being at that state
@@ -128,6 +132,26 @@ Q network objects.
 
 ### Results
 
+#### 1. Vanilla DQN
+
+![Vanilla DQN](experiments/dqn/result.png)
+
+Goal achieved in 579 episodes.
+
+#### 2. Double DQN
+
+![Double DQN](experiments/double_dqn/result.png)
+
+Goal achieved in 515 episodes.
+
+#### 3. Dueling DQN
+
+![Dueling DQN](experiments/dueling_dqn/result.png)
+
+Goal achieved in 496 episodes.
+
+### Conclusion
+All models solved the problem without much hyperparameter tweaking and acheived +13 average rewards. Improvements are observed in the performance by using double dqn and dueling dqn( lesser number of training episodes are required for goal completion).
 ### Ideas for future work
 
 - Prioritized experience replay. [paper](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=2ahUKEwj2-NGu9e7hAhWOiHAKHXhIDvQQFjABegQIARAB&url=https%3A%2F%2Farxiv.org%2Fabs%2F1511.05952&usg=AOvVaw3Qk4Ho4LfiFn4eFYLh7Dei)

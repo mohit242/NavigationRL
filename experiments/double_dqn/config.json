@@ -1,0 +1,22 @@
+{
+  "qnet_params": {
+    "type": "simple",
+    "fc1_units": 128,
+    "fc2_units": 64
+  },
+  "double_dqn": true,
+  "logging": false,
+  "max_episodes": 2000,
+  "eps_start": 1.0,
+  "eps_end": 0.01,
+  "eps_decay": 0.995,
+  "buffer_size": 1e5,
+  "batch_size": 64,
+  "gamma": 0.99,
+  "tau": 1e-3,
+  "lr": 5e-4,
+  "update_every": 4,
+  "network_weight_file": "experiments/double_dqn/checkpoint.pth",
+  "no_graphics": false,
+  "seed": 100
+}
